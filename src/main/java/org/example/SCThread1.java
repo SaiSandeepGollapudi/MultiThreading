@@ -1,61 +1,67 @@
 package org.example;
 
-class ATM
-{
+class ATM {
 
-    synchronized public void checkBalance(String name)
-    {
-        System.out.print(name + " Checking ");
+    // Synchronized method to check balance
+    synchronized public void checkBalance(String customerName) {
+        System.out.print(customerName + " Checking ");
 
-        try{Thread.sleep(1000);}catch(Exception e){}
+        try {
+            // Simulate some delay for checking balance
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Balance");
     }
 
-    synchronized public void withdraw(String name,int amount)
-    {
-        System.out.print(name + " withdrawing ");
+    // Synchronized method to withdraw amount
+    synchronized public void withdraw(String customerName, int withdrawalAmount) {
+        System.out.print(customerName + " withdrawing ");
 
-        try{Thread.sleep(1000);}catch(Exception e){}
+        try {
+            // Simulate some delay for withdrawal
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println(amount);
-
+        System.out.println(withdrawalAmount);
     }
 }
 
-class Customer extends Thread
-{
-    String name;
-    int amount;
-    ATM atm;
+class Customer extends Thread {
+    private String customerName;
+    private int withdrawalAmount;
+    private ATM atm;
 
-    Customer(String n,ATM a,int amt)
-    {
-        name=n;
-        atm=a;
-        amount=amt;
+    Customer(String name, ATM atm, int amount) {
+        customerName = name;
+        this.atm = atm;
+        withdrawalAmount = amount;
     }
-    public void useATM()
-    {
-        atm.checkBalance(name);
-        atm.withdraw(name, amount);
+
+    // Method to perform ATM transactions
+    public void useATM() {
+        atm.checkBalance(customerName);
+        atm.withdraw(customerName, withdrawalAmount);
     }
-    public void run()
-    {
+
+    @Override
+    public void run() {
         useATM();
     }
 }
 
-public class SCThread1
-{
-    public static void main(String[] args)
-    {
-        ATM atm=new ATM();
-        Customer c1=new Customer("Smith",atm,100);
-        Customer c2=new Customer("John",atm,200);
-        c1.start();
-        c2.start();
-
-
+public class SCThread1 {
+    public static void main(String[] args) {
+        ATM atm = new ATM();
+        // Create customer objects
+        Customer customer1 = new Customer("Smith", atm, 100);
+        Customer customer2 = new Customer("John", atm, 200);
+        // Start customer threads
+        customer1.start();
+        customer2.start();
     }
 }
